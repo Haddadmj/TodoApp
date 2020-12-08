@@ -19,6 +19,17 @@ class Todo(db.Model):
 
 # db.create_all()
 
+@app.route('/todos/<todo_id>', methods=['DELETE'])
+def deleteTodo(todo_id):
+  try:
+    Todo.query.filter_by(id=todo_id).delete()
+    db.session.commit()
+  except:
+    db.session.rollback()
+  finally:
+    db.session.close()
+  return jsonify({ 'success': True })
+
 @app.route('/todos/<todo_id>/setCompleted', methods=['POST'])
 def setCompleted(todo_id):
   try:
